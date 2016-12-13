@@ -27,18 +27,31 @@ public class ProjectionbugApplicationTests {
                 new Person(new LocalDate(1976, 7, 15), "Joris"),
                 new Person(new LocalDate(1978, 2, 19), "Sander")
         ));
+        personRepository.deleteAll();
     }
 
     @Test
     public void findAllBirthDates() {
         List<LocalDate> birthDates = personRepository.findAllBirthDates();
-        Assert.assertEquals(2, birthDates.size());
+        Assert.assertEquals(0, birthDates.size());
     }
     
     @Test
     public void findAllBirthDatesNativeJpa() {
         List<LocalDate> birthDates = em.createQuery("select distinct p.birthDate from Person p order by p.birthDate", LocalDate.class).getResultList();
-        Assert.assertEquals(2, birthDates.size());
+        Assert.assertEquals(0, birthDates.size());
+    }
+
+    @Test
+    public void findMinBirthDate() {
+        LocalDate birthDate = personRepository.findMinBirthDate();
+        Assert.assertNull(birthDate);
+    }
+
+    @Test
+    public void findMinBirthDateNativeJpa() {
+        LocalDate birthDate = em.createQuery("select min(p.birthDate) from Person p", LocalDate.class).getSingleResult();
+        Assert.assertNull(birthDate);
     }
 
 }

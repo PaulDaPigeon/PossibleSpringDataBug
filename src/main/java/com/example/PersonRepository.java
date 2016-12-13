@@ -9,4 +9,7 @@ import java.util.List;
 public interface PersonRepository extends JpaRepository<Person, Long> {
     @Query("select distinct p.birthDate from Person p order by p.birthDate")
     List<LocalDate> findAllBirthDates();
+
+    @Query("select min(p.birthDate) from Person p")
+    LocalDate findMinBirthDate();
 }
